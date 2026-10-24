@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b13">
+  <link rel="icon" type="image/svg+xml" href="assets/phoenix-favicon.svg">
+  <meta name="description" content="Discover abandoned open-source projects, explore what they need, and build a practical plan to bring them back to life."><title>PHOENIX — Give Open Source a Second Life</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&family=IM+Fell+English:ital@0;1&family=Metal+Mania&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.27/dist/lenis.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css?v=phoenix-brand-polish-20261024">
+  <link rel="stylesheet" href="revival-enhancements.css?v=phoenix-visible-home-20261024">
+  <link rel="stylesheet" href="canvas-protocol.css?v=variant-factor-unlocked-20261024">
+</head>
+<body>
+  <main class="phoenix-app">
+    <section class="intro-sequence" id="intro" aria-label="PHOENIX cinematic intro">
+      <div class="intro-stage">
+        <canvas id="introCanvas" class="intro-canvas"></canvas>
+        <div class="intro-shade"></div>
+        <div class="intro-loader" id="introLoader">
+          <div class="phoenix-mark"><img src="assets/icons/phoenix.png" alt=""></div>
+          <p>PREPARING THE GATES</p>
+          <div class="loader-track"><span id="loaderBar"></span></div>
+          <small id="loaderText">0%</small>
+        </div>
+        <div class="frame-warning" id="frameWarning" hidden></div>
+        <button class="skip-intro" id="skipIntro">Skip intro ↗</button>
+      </div>
+    </section>
+
+    <header class="topbar">
+      <a class="brand" href="#landing" id="brandHome"><span class="brand-icon"><img src="assets/phoenix-emblem.webp" alt=""></span><span>PHOENIX</span></a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-link active" data-page="Home">Home</button>
+        <button class="nav-link" data-page="Graveyard">Graveyard</button>
+        <button class="nav-link" data-page="Memorial Garden">Memorial Garden</button>
+        <button class="nav-link" data-page="Hall of Fame">Hall of Fame</button>
+        <button class="nav-link" data-page="Community">Community</button>
+        <button class="nav-link" data-page="World Cemetery">Map</button>
+      </nav>
+      <button class="ai-assistant-button" id="aiAssistantButton" type="button" aria-label="Open Phoenix AI assistant" aria-expanded="false" title="Phoenix AI assistant">
+        <img src="assets/ai-assistant-robot.webp" alt="" aria-hidden="true">
+      </button>
+      <div class="profile-menu-wrap" id="profileMenuWrap">
+        <button class="profile-button" id="profileButton" type="button" title="Open profile menu" aria-label="Open profile menu" aria-haspopup="true" aria-expanded="false"><span id="profileButtonAvatar">👤</span></button>
+        <div class="profile-dropdown" id="profileDropdown" role="menu" aria-labelledby="profileButton" hidden>
+          <div class="profile-dropdown-heading"><span class="profile-avatar" id="profileMenuAvatar">👤</span><span class="profile-identity"><strong id="profileMenuName">PHOENIX MEMBER</strong><small id="profileConnectionStatus">Demo account · Not connected</small></span></div>
+          <div class="profile-dropdown-divider"></div>
+          <button type="button" class="profile-menu-item" role="menuitem" data-profile-action="profile"><span>♙</span><span>My Profile<small>Account overview</small></span></button>
+          <button type="button" class="profile-menu-item" role="menuitem" data-profile-action="repositories"><span>⌘</span><span>My Repositories<small>Browse GitHub projects</small></span></button>
+          <button type="button" class="profile-menu-item" role="menuitem" data-profile-action="saved"><span>♡</span><span>Saved Projects<small>Projects you voted on</small></span></button>
+          <button type="button" class="profile-menu-item" role="menuitem" data-profile-action="activity"><span>↗</span><span>My Activity<small>Your Phoenix activity</small></span></button>
+          <button type="button" class="profile-menu-item" role="menuitem" data-profile-action="notifications"><span>◌</span><span>Notifications<small>Updates and reminders</small></span></button>
+          <div class="profile-dropdown-divider"></div>
+          <button type="button" class="profile-menu-item" role="menuitem" data-profile-action="settings"><span>⚙</span><span>Settings<small>Preferences and appearance</small></span></button>
+          <button type="button" class="profile-menu-item" role="menuitem" data-profile-action="help"><span>?</span><span>Help &amp; Support<small>How Phoenix works</small></span></button>
+          <div class="profile-dropdown-divider"></div>
+          <button type="button" class="profile-menu-item profile-menu-connect" role="menuitem" data-profile-action="github"><span>◉</span><span><strong id="profileGithubAction">Connect GitHub</strong><small id="profileGithubActionDetail">Demo connection</small></span></button>
+        </div>
+      </div>
+    </header>
+
+    <aside class="ai-assistant-panel" id="aiAssistantPanel" hidden aria-label="Phoenix AI assistant">
+      <div class="ai-chat-header">
+        <img src="assets/ai-assistant-robot.webp" alt="" aria-hidden="true">
+        <div><strong>Phoenix AI</strong><span>Project revival assistant</span></div>
+        <button class="ai-chat-close" id="aiAssistantClose" type="button" aria-label="Close AI assistant">×</button>
+      </div>
+      <div class="ai-chat-messages" id="aiAssistantMessages" aria-live="polite">
+        <div class="ai-message bot"><span class="ai-message-avatar">✦</span><p><b>PHOENIX Revival Assistant</b><br>I can help turn an unfinished open-source project into a clear, achievable comeback plan. This is a simulated demo.</p></div>
+        <div class="ai-message user"><p>What should I do first?</p></div>
+        <div class="ai-message bot"><span class="ai-message-avatar">✦</span><p>Start with a quick health check: confirm the project still installs, read the open issues, and identify one small improvement that can be shipped independently.</p></div>
+        <div class="ai-message user"><p>Can you make a revival plan?</p></div>
+        <div class="ai-message bot"><span class="ai-message-avatar">✦</span><p><b>Suggested first steps</b><br>1. Verify setup and document prerequisites<br>2. Triage open issues and label good first issues<br>3. Fix one high-impact bug<br>4. Add a contribution guide and release checklist</p></div>
+      </div>
+      <form class="ai-chat-input" id="aiAssistantForm">
+        <input id="aiAssistantInput" type="text" maxlength="240" placeholder="Ask me anything about projects…" aria-label="Message Phoenix AI" autocomplete="off">
+        <article class="canvas-draft-card ai-draft-card" id="aiMessageDraftCard" data-drag-type="ai-message" data-input-id="aiAssistantInput" draggable="false" hidden>
+          <span class="canvas-card-kicker">MESSAGE CARD</span><strong>Drag to Send Message</strong><small class="canvas-draft-preview">Your message will appear here.</small>
+        </article>
+        <p class="canvas-inline-hint">Type a message, then drag its card to the <b>Send Message</b> zone.</p>
+      </form>
+    </aside>
+
+    <section id="landing" class="landing-hero">
+
+
+      <div class="hero-content">
+        <div class="hero-copy">
+          <p class="eyebrow">GIVE GREAT IDEAS A SECOND LIFE</p>
+          <h2>Dead Projects<br>Deserve a <span>Second Life.</span></h2>
+          <p class="hero-description">Discover forgotten open-source gems, understand what they need, and build a practical plan to bring them back with a community of contributors.</p>
+          <div class="hero-actions">
+            <button class="button button-primary" id="exploreProjects" type="button">Explore Projects <span aria-hidden="true">↗</span></button>
+            <button class="button button-secondary" id="connectGithub" type="button">◉ Connect with GitHub</button>
+          </div>
+        </div>
+        
+      </div>
+      <div class="metrics-bar">
+        <div class="metric"><img class="metric-icon" src="assets/icons/graveyard.png" alt="" aria-hidden="true"><div><strong id="graveyardCount">1,248</strong><small>Abandoned Projects</small></div></div>
+        <div class="metric"><img class="metric-icon" src="assets/icons/memorial-garden.png" alt="" aria-hidden="true"><div><strong id="revivedCount">312</strong><small>Projects Revived</small></div></div>
+        <div class="metric"><img class="metric-icon" src="assets/icons/community.png" alt="" aria-hidden="true"><div><strong>5,680</strong><small>Developers</small></div></div>
+        <div class="metric"><img class="metric-icon" src="assets/icons/hall-of-fame.png" alt="" aria-hidden="true"><div><strong>87%</strong><small>Success Rate</small></div></div>
+      </div>
+      <div class="hero-footnote">Demo content is illustrative. Connect a backend to show live platform metrics.</div>
+    </section>
+
+    <section id="appContent" class="app-content" hidden>
+      <div class="content-heading">
+        <div class="graveyard-heading"><p class="eyebrow">PHOENIX · ABANDONED PROJECT</p><h2 id="pageTitle">Projects waiting for a second chance</h2><p class="muted" id="pageDescription">Find unfinished ideas worth saving and contributors ready to help.</p></div>
+        <div class="heading-actions">
+          <label class="graveyard-search"><span>⌕</span><input id="graveyardSearch" type="search" placeholder="Search projects..." aria-label="Search projects"></label>
+          <button class="graveyard-icon-button" type="button" aria-label="Notifications" title="Notifications">♧</button>
+          <button class="graveyard-icon-button" type="button" aria-label="Settings" title="Settings">⚙</button>
+          <button class="button button-primary small" id="toggleFilters" type="button" aria-expanded="false">Filters</button>
+          <button class="button button-secondary small" id="addProjectButton" type="button">＋ Add a project</button>
+          <button class="button button-primary small" id="importReposButton" type="button">Import from GitHub</button>
+        </div>
+      </div>
+      <div id="projectsView">
+        <div class="filter-row">
+          <div class="filter-tabs">
+            <button class="filter-tab selected" data-filter="Home">All projects</button>
+            <button class="filter-tab" data-filter="Graveyard">Graveyard</button>
+            <button class="filter-tab" data-filter="Memorial Garden">Memorial Garden</button>
+            <button class="filter-tab" data-filter="Hall of Fame">Hall of Fame</button>
+          </div>
+          <div class="graveyard-selects"><select id="languageFilter" aria-label="Filter by language"><option value="">All languages</option><option>Python</option><option>JavaScript</option><option>TypeScript</option><option>React</option><option>Java</option><option>C++</option></select><label class="graveyard-sort"><span class="sort-label">Sort</span><select id="graveyardSort" aria-label="Sort projects"><option value="popular">Most liked</option><option value="disliked">Most disliked</option><option value="name">Name A–Z</option><option value="recent">Recently active</option></select></label></div>
+        </div>
+        <div class="project-grid" id="projectGrid"></div>
+      </div>
+      <section id="memorialGardenView" class="memorial-garden-view" hidden aria-label="Memorial Garden">
+        <div class="memorial-garden-heading">
+          <div><p class="eyebrow">PHOENIX · REVIVED PROJECTS</p><h2>Memorial Garden</h2><p>Projects that were brought back to life.</p></div>
+          <div class="memorial-garden-tools">
+            <label class="memorial-search"><span>⌕</span><input id="memorialSearch" type="search" placeholder="Search revived projects..." aria-label="Search revived projects"></label>
+            <label class="memorial-sort"><span>Sort by</span><select id="memorialSort" aria-label="Sort revived projects"><option value="recent">Recently revived</option><option value="popular">Most liked</option><option value="name">Name A–Z</option></select></label>
+          </div>
+        </div>
+        <div class="memorial-garden-grid" id="memorialGardenGrid"></div>
+      </section>
+      <section id="hallOfFameView" class="hall-of-fame-view" hidden aria-label="Hall of Fame">
+        <div class="hall-of-fame-heading">
+          <div><p class="eyebrow">PHOENIX · LAUNCHED PROJECTS</p><h2>Hall of Fame</h2><p>Successfully launched projects.</p></div>
+          <div class="hall-of-fame-tools">
+            <label class="hall-search"><span>⌕</span><input id="hallSearch" type="search" placeholder="Search launched projects..." aria-label="Search launched projects"></label>
+            <label class="hall-sort"><span>Sort by</span><select id="hallSort" aria-label="Sort launched projects"><option value="popular">Most liked</option><option value="recent">Recently launched</option><option value="name">Name A–Z</option></select></label>
+          </div>
+        </div>
+        <div class="hall-category-tabs" role="group" aria-label="Hall of Fame categories">
+          <button class="hall-category selected" type="button" data-hall-category="all">All</button>
+          <button class="hall-category" type="button" data-hall-category="web">Web Apps</button>
+          <button class="hall-category" type="button" data-hall-category="mobile">Mobile Apps</button>
+          <button class="hall-category" type="button" data-hall-category="open-source">Open Source</button>
+          <button class="hall-category" type="button" data-hall-category="featured">Featured</button>
+        </div>
+        <div class="hall-of-fame-grid" id="hallOfFameGrid"></div>
+      </section>
+      <section id="communityView" class="community-page" hidden aria-label="Phoenix Community">
+        <div class="community-hero community-banner">
+          <div class="community-hero-copy"><p class="eyebrow">PHOENIX <span class="banner-dot">◆</span> COMMUNITY <i></i></p><h2>Commun<span>ity</span></h2><p>Ask for help, share knowledge, and connect with fellow builders. <b>🔥</b></p>
+            <div class="community-hero-pills"><button type="button" data-community-action="ask"><span>❔</span> Ask Questions</button><button type="button" data-community-action="ideas"><span>💡</span> Share Ideas</button><button type="button" data-community-action="help"><span>♟</span> Get Help</button><button type="button" data-community-action="collaborate"><span>🤝</span> Collaborate</button><button type="button" data-community-action="grow"><span>🚀</span> Grow Together</button></div>
+          </div>
+          <div class="community-hero-art community-hero-image" aria-hidden="true"><img src="assets/community-phoenix.webp" alt="" loading="eager"></div>
+          <div class="community-banner-motto" aria-hidden="true">Together<br><em>We Build Better</em><i></i></div>
+        </div>
+        <div class="community-layout">
+          <form class="panel community-form" id="communityForm">
+            <div class="community-form-title"><span class="community-form-icon">✉</span><div><h3>Ask the community</h3><p class="muted">Stuck on something? Let's solve it together.</p></div></div>
+            <label class="community-field-label" for="communityTopic">Question title <span>*</span></label>
+            <input id="communityTopic" required maxlength="100" placeholder="Keep it short and clear...">
+            <label class="community-field-label" for="communityCategory">Category</label>
+            <select id="communityCategory"><option value="Community">Choose a category</option><option>Frontend</option><option>Backend</option><option>AI / ML</option><option>DevOps</option><option>Open Source</option><option>Career & Learning</option><option>Ideas</option></select>
+            <label class="community-field-label" for="communityBody">Description <span>*</span></label>
+            <textarea id="communityBody" rows="5" maxlength="2000" placeholder="Explain the problem, tech stack, and what you've tried..." required></textarea>
+            <div class="community-form-bottom"><label class="community-notify"><input id="communityNotify" type="checkbox" checked><span>Notify me about new replies</span></label><span class="canvas-inline-hint">Drag the draft below to Publish.</span></div>
+            <article class="canvas-draft-card" id="communityDraftCard" data-drag-type="community-question" draggable="false" aria-live="polite">
+              <span class="canvas-card-kicker">COMMUNITY DRAFT</span><strong>Complete the title and description</strong><small class="canvas-draft-preview">Your question becomes draggable when required fields are ready.</small>
+            </article>
+            <p class="tiny-note">Prototype mode · published posts are stored in this session.</p>
+          </form>
+          <div class="community-discussions-panel"><div class="community-discussions-heading"><div><p class="eyebrow">FROM THE COMMUNITY</p><h3>Latest discussions</h3></div><label class="community-search"><span>⌕</span><input id="communitySearch" type="search" placeholder="Search discussions..." aria-label="Search discussions"></label></div>
+            <div class="community-feed-tabs"><button class="selected" type="button" data-community-sort="latest">✦ Latest</button><button type="button" data-community-sort="helpful">♧ Most helpful</button><button type="button" data-community-sort="hot">↗ Hot</button></div>
+            <div class="discussion-list" id="discussionList"></div>
+          </div>
+        </div>
+        <div class="community-more"><div><p class="eyebrow">GROW TOGETHER</p><h3>More ways to engage</h3></div><article><span>♧</span><strong>Collaborate on GitHub</strong><small>Contribute to projects and issues.</small></article><article><span>✦</span><strong>Earn recognition</strong><small>Celebrate helpful community members.</small></article><article><span>◷</span><strong>Community events</strong><small>Build, learn, and share together.</small></article><article><span>♧</span><strong>Find your people</strong><small>Connect with developers like you.</small></article></div>
+      </section>
+      <section id="mapView" class="map-dashboard" hidden aria-label="World Cemetery map">
+        <div class="interactive-map-toolbar">
+          <div><span class="map-live-dot"></span><strong>Interactive world map</strong><p>Explore the world with drag and zoom controls.</p></div>
+          <div class="map-legend"><span><i class="legend-dot"></i> Interactive map</span><span class="map-data-note">Ready</span></div>
+        </div>
+        <div class="map-explorer-layout">
+          <div class="map-image-stage" id="mapStage" aria-label="Interactive world map">
+            <div id="interactiveMap" role="application" aria-label="Interactive map of sample project locations"></div>
+          </div>
+          <aside class="country-project-panel" aria-label="Sample project counts by country">
+            <h3>Top Countries</h3>
+            <p class="country-panel-note">Sample project distribution</p>
+            <ol id="countryProjectList" class="country-project-list"></ol>
+            <p class="country-panel-footnote">Illustrative sample data — not live submissions.</p>
+            <div class="map-sidebar-divider"></div>
+            <section class="map-leaderboard" aria-label="Leaderboard">
+              <h3>Leaderboard</h3>
+              <p class="country-panel-note">Top contributors · demo data</p>
+              <ol class="leaderboard-list">
+                <li><span class="leaderboard-rank">01</span><span class="leaderboard-person"><strong>CodePhoenix</strong><small>Projects revived</small></span><strong class="leaderboard-score">128 pts</strong></li>
+                <li><span class="leaderboard-rank">02</span><span class="leaderboard-person"><strong>ByteBuilder</strong><small>Helpful reviews</small></span><strong class="leaderboard-score">96 pts</strong></li>
+                <li><span class="leaderboard-rank">03</span><span class="leaderboard-person"><strong>DevNova</strong><small>Community support</small></span><strong class="leaderboard-score">74 pts</strong></li>
+                <li><span class="leaderboard-rank">04</span><span class="leaderboard-person"><strong>StackSage</strong><small>Issues solved</small></span><strong class="leaderboard-score">61 pts</strong></li>
+              </ol>
+              <p class="country-panel-footnote">Illustrative leaderboard — not real user rankings.</p>
+            </section>
+          </aside>
+        </div>
+        <div class="map-footer-note" id="mapStatus" role="status">Explore the world map: drag to pan and scroll to zoom. No demo markers are shown.</div>
+      </section>
+      <section id="projectDetailView" class="project-detail-view" hidden aria-label="Project tombstone details">
+        <button class="detail-back" id="backToGraveyard" type="button">← Back to Graveyard</button>
+        <div id="projectDetailContent"></div>
+      </section>
+    </section>
+    <footer class="site-footer phoenix-credit-banner"><div class="footer-brand"><img src="assets/icons/phoenix.png" alt=""> PHOENIX</div><div class="phoenix-footer-message"><p>Every last commit deserves another chance.</p><span>Built for the people who believe unfinished ideas still matter.</span></div><div class="phoenix-footer-credit"><i></i> BY SUHANI AND SHUBHANG</div></footer>
+  </main>
+
+
+    <aside class="canvas-protocol" id="canvasProtocol" aria-label="The Canvas Protocol action zones">
+    <div class="canvas-protocol-heading">
+      <div class="canvas-protocol-brand"><span class="canvas-protocol-mark">✦</span><div><strong>THE CANVAS PROTOCOL</strong><small>Drag a data card into a zone to perform its action</small></div></div>
+      <p id="canvasStatus" class="canvas-status" role="status" aria-live="polite">Ready · Select a project or prepare a draft card.</p>
+    </div>
+    <div class="canvas-zones" id="canvasZones">
+      <div class="canvas-zone" data-drop-action="revive" role="region" aria-label="Drop here to revive a project or open its revival plan"><span class="canvas-zone-icon">✦</span><strong>Revive</strong><small>Project / plan</small></div>
+      <div class="canvas-zone" data-drop-action="support" role="region" aria-label="Drop here to support a project"><span class="canvas-zone-icon">♥</span><strong>Support</strong><small>Like a project</small></div>
+      <div class="canvas-zone" data-drop-action="needs-work" role="region" aria-label="Drop here to mark a project as needing work"><span class="canvas-zone-icon">⌁</span><strong>Needs Work</strong><small>Flag for help</small></div>
+      <div class="canvas-zone" data-drop-action="flower" role="region" aria-label="Drop here to leave a flower tribute"><span class="canvas-zone-icon">✿</span><strong>Leave Flower</strong><small>Tribute card</small></div>
+      <div class="canvas-zone" data-drop-action="save" role="region" aria-label="Drop here to save a project or apply changes"><span class="canvas-zone-icon">◇</span><strong>Save</strong><small>Changes / project</small></div>
+      <div class="canvas-zone" data-drop-action="publish" role="region" aria-label="Drop here to publish a community question or discussion"><span class="canvas-zone-icon">↗</span><strong>Publish</strong><small>Community post</small></div>
+      <div class="canvas-zone" data-drop-action="add-project" role="region" aria-label="Drop here to submit a project"><span class="canvas-zone-icon">＋</span><strong>Add Project</strong><small>Project submission</small></div>
+      <div class="canvas-zone" data-drop-action="connect" role="region" aria-label="Drop here to connect or disconnect demo GitHub"><span class="canvas-zone-icon">◉</span><strong>Connect</strong><small>GitHub</small></div>
+      <div class="canvas-zone" data-drop-action="import" role="region" aria-label="Drop here to import selected demo repositories"><span class="canvas-zone-icon">⇩</span><strong>Import</strong><small>Repo cards</small></div>
+      <div class="canvas-zone" data-drop-action="complete-task" role="region" aria-label="Drop here to complete a revival task"><span class="canvas-zone-icon">✓</span><strong>Complete Task</strong><small>Revival work</small></div>
+      <div class="canvas-zone" data-drop-action="send-message" role="region" aria-label="Drop here to send a Phoenix AI message"><span class="canvas-zone-icon">➤</span><strong>Send Message</strong><small>Phoenix AI</small></div>
+    </div>
+  </aside>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" id="modalDialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-heading"><h2 id="modalTitle">Dialog</h2><button class="modal-close" id="modalClose" aria-label="Close dialog">×</button></div>
+      <div id="modalContent"></div>
+    </section>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/lenis@1.3.27/dist/lenis.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js?v=variant-factor-unlocked-20261024-v1"></script>
+  <script src="revival-enhancements.js?v=variant-factor-unlocked-20261024-v1"></script>
+</body>
+</html>
